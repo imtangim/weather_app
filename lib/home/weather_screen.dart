@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'forcast/forecast.dart';
-import 'additional_info/additional_info.dart';
+import 'additional_info/additionalinfo.dart';
 
 class WeatherScreen extends StatelessWidget {
   const WeatherScreen({super.key});
