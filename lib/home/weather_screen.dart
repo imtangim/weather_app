@@ -1,12 +1,39 @@
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:http/http.dart' as http;
+import 'package:wheater_app/home/secret.dart';
 import 'forcast/forecast.dart';
 import 'additional_info/additionalinfo.dart';
+import 'location_l/location.dart';
 
-class WeatherScreen extends StatelessWidget {
+class WeatherScreen extends StatefulWidget {
   const WeatherScreen({super.key});
+
+  @override
+  State<WeatherScreen> createState() => _WeatherScreenState();
+}
+
+class _WeatherScreenState extends State<WeatherScreen> {
+  @override
+  void initState() {
+    super.initState();
+    getWeather();
+  }
+
+  //weather api
+  Future getWeather() async {
+    LocationManager location = LocationManager();
+    await location.fetchLocationData();
+    double? lat = location.lat;
+    double? long = location.long;
+
+    final res = await http.get(
+      Uri.parse(
+          "https://api.openweathermap.org/data/2.5/onecall?lat=$lat&lon=$long&appid=$openweatherApikey"),
+    );
+    print(res);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +75,7 @@ class WeatherScreen extends StatelessWidget {
                       child: Column(
                         children: [
                           Text(
-                            "300°K",
+                            "30°C",
                             style: TextStyle(
                               fontSize: 32,
                               fontWeight: FontWeight.bold,
@@ -92,12 +119,41 @@ class WeatherScreen extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  ForcastCard(),
-                  ForcastCard(),
-                  ForcastCard(),
-                  ForcastCard(),
-                  ForcastCard(),
-                  ForcastCard(),
+                  ForcastCard(
+                    icon: Icons.cloud,
+                    temperature: 30.4,
+                    time: "00:02",
+                  ),
+                  ForcastCard(
+                    icon: Icons.cloud,
+                    temperature: 30.4,
+                    time: "04:02",
+                  ),
+                  ForcastCard(
+                    icon: Icons.cloud,
+                    temperature: 30.4,
+                    time: "08:02",
+                  ),
+                  ForcastCard(
+                    icon: Icons.cloud,
+                    temperature: 30.4,
+                    time: "12:02",
+                  ),
+                  ForcastCard(
+                    icon: Icons.cloud,
+                    temperature: 30.4,
+                    time: "16:02",
+                  ),
+                  ForcastCard(
+                    icon: Icons.cloud,
+                    temperature: 30.4,
+                    time: "20:02",
+                  ),
+                  ForcastCard(
+                    icon: Icons.cloud,
+                    temperature: 30.4,
+                    time: "24:02",
+                  ),
                 ],
               ),
             ),
