@@ -28,11 +28,18 @@ class _WeatherScreenState extends State<WeatherScreen> {
     double? lat = location.lat;
     double? long = location.long;
 
-    final res = await http.get(
+    final response = await http.get(
       Uri.parse(
-          "https://api.openweathermap.org/data/2.5/onecall?lat=$lat&lon=$long&appid=$openweatherApikey"),
+          "https://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$long&appid=$openweatherApikey"),
     );
-    print(res);
+    // Check if the request was successful (status code 200)
+    if (response.statusCode == 200) {
+      // Print the response body
+      print(response.body);
+    } else {
+      // Print an error message if the request was not successful
+      print('$lat $long');
+    }
   }
 
   @override
