@@ -18,14 +18,13 @@ class WeatherScreen extends StatefulWidget {
 
 class _WeatherScreenState extends State<WeatherScreen> {
   //weather api
-  late Future<Map<String, dynamic>> weather;
   Future<Map<String, dynamic>> getWeather() async {
     LocationManager location = LocationManager();
     await location.fetchLocationData();
     double? lat = location.lat;
     double? long = location.long;
-
     try {
+      // print("$lat $long");
       final response1 = await http.get(
         Uri.parse(
             "https://api.openweathermap.org/data/2.5/forecast?lat=$lat&lon=$long&appid=$openweatherApikey"),
@@ -37,7 +36,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
       final data1 = jsonDecode(response1.body);
       final data2 = jsonDecode(response2.body);
-      // print("$lat $long");
+
+      // print(response1.body);
 
       if ((int.parse(data1['cod']) != 200) & (data2['cod'] != 200)) {
         throw data2['message'];
@@ -54,7 +54,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
   @override
   void initState() {
     super.initState();
-    weather = getWeather();
+    // weather = getWeather();
   }
 
   @override
@@ -72,21 +72,21 @@ class _WeatherScreenState extends State<WeatherScreen> {
           IconButton(
               onPressed: () {
                 setState(() {
-                  weather = getWeather();
+                  // weather = getWeather();
                 });
               },
               icon: const Icon(Icons.refresh))
         ],
       ),
       body: FutureBuilder(
-        future: weather,
+        future: getWeather(),
         builder: (context, snapshot) {
+          // print(snapshot.connectionState);
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
               child: CircularProgressIndicator.adaptive(),
             );
-          }
-          if (snapshot.hasError) {
+          } else if (snapshot.hasError) {
             return Center(
               child: Text(snapshot.error.toString()),
             );
